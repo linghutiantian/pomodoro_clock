@@ -126,7 +126,7 @@ class Pomo:
     def Display(self):
         minute = int(math.ceil(self.countdown_seconds/60.0))
         seconds = minute * 60  - self.countdown_seconds
-        print(self.state, minute, seconds)
+        # print(self.state, minute, seconds)
 
         self.display.clear()
 
