@@ -141,9 +141,12 @@ class Pomo:
     
     def Run(self):
         while True:
-            time.sleep(self.SLEEP_INTERVAL)
+            starttime = time.time()
             self.UpdateState();
             self.Display();
+            sleeptime = self.SLEEP_INTERVAL - (time.time() - starttime)
+            if sleeptime > 0:
+                time.sleep(sleeptime)
 
 def main():
     pomo = Pomo()
