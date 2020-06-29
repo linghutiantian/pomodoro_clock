@@ -236,17 +236,13 @@ class Pomo:
             if self.state == self.WORK_PAUSE or self.state == self.REST_PAUSE:
                 return BicolorMatrix8x8.YELLOW
         if (x == 6):
+            if self.state != self.WORK_PAUSE and self.state != self.REST_PAUSE:
+                if self.point1_second < 5:
+                    sec = sec - 8
             if y * 7.5 > sec:
                 return 0
             else:
                 return c
-        if (x == 5 and y == 7):
-            if self.state == self.WORK_PAUSE or self.state == self.REST_PAUSE:
-                return 0
-            if self.point1_second < 5:
-                return c
-            else:
-                return 0
         if (x >= 5):
             return 0
         if y < 3:
