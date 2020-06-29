@@ -177,6 +177,7 @@ class Pomo:
     WORK_RUN = 1
     REST_PAUSE = 2
     REST_RUN = 3
+    OFF = 4
     
     
     # Some constants
@@ -206,12 +207,19 @@ class Pomo:
                     self.state = self.WORK_RUN
                     self.countdown_seconds = 25 * 60
                     self.point1_second = 0
+            if (self.button_consecutive == self.NEXT_STATE_THRESHOLD * 3):
+                self.state = self.OFF
+                self.display.clear()
+                self.display.write_display()
         else:
             if (self.button_consecutive):
                 if (self.button_consecutive < self.NEXT_STATE_THRESHOLD):
                     if self.state < 2:
                         self.state = 1 - self.state
                     else:
+                        if self.state == self.OFF:
+                            self.countdown_seconds = 25 * 60
+                            self.point1_second = 0
                         self.state = 5 - self.state
                 self.button_consecutive = 0
         
@@ -254,6 +262,8 @@ class Pomo:
         else:
             return 0
     def Display(self):
+        if self.state == self.OFF:
+            return
         minute = int(math.ceil(self.countdown_seconds/60.0))
         seconds = minute * 60  - self.countdown_seconds
         # print(self.state, minute, seconds)
