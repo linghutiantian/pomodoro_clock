@@ -1,7 +1,6 @@
 import time
 import os
 import math
-import Adafruit_BBIO.GPIO as GPIO
 from Adafruit_LED_Backpack import BicolorMatrix8x8
 
 
@@ -168,8 +167,6 @@ table = [
     [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],   # U+007F
 ]
 
-GPIO.setup("P9_12", GPIO.IN)
-
 class Pomo:
 
     # States
@@ -193,7 +190,7 @@ class Pomo:
         self.countdown_seconds = 25 * 60
         self.button_consecutive = 0
         self.point1_second = 0
-        self.display = BicolorMatrix8x8.BicolorMatrix8x8(busnum=2)
+        self.display = BicolorMatrix8x8.BicolorMatrix8x8(busnum=self.busnum)
         self.display.begin()
     def UpdateState(self):
         if (self.Button()):
@@ -318,9 +315,3 @@ class Pomo:
             if sleeptime > 0:
                 time.sleep(sleeptime)
 
-def main():
-    pomo = Pomo()
-    pomo.Run()
-
-if __name__ == "__main__":
-    main()
