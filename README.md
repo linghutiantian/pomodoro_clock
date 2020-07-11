@@ -4,6 +4,10 @@
 
 https://github.com/adafruit/adafruit-beaglebone-io-python
 
+## for raspberry pi
+
+Follow this link to setup I2C https://diyprojects.io/activate-i2c-bus-raspberry-pi-3-zero/#.XwodUXHYq3B
+
 
 ## for both beaglebone black and raspberry pi
 
