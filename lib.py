@@ -1,8 +1,9 @@
+# Write message to '/tmp/pomo_msg.txt'
+
 import time
 import os
 import math
 from Adafruit_LED_Backpack import BicolorMatrix8x8
-
 
 digits =[
 #0
@@ -200,11 +201,14 @@ class Pomo:
                     self.state = self.REST_RUN
                     self.countdown_seconds = 5 * 60
                     self.point1_second = 0
+                    self.PrintText("Rest!", color=BicolorMatrix8x8.GREEN)
                 else:
                     self.state = self.WORK_RUN
                     self.countdown_seconds = 25 * 60
                     self.point1_second = 0
-            if (self.button_consecutive == self.NEXT_STATE_THRESHOLD * 3):
+                    self.PrintText("Work!", color=BicolorMatrix8x8.RED)
+            if (self.button_consecutive == self.NEXT_STATE_THRESHOLD * 2):
+                self.PrintText("Powering Off", color=BicolorMatrix8x8.YELLOW)
                 self.state = self.OFF
                 self.display.clear()
                 self.display.write_display()
@@ -218,6 +222,12 @@ class Pomo:
                             self.countdown_seconds = 25 * 60
                             self.point1_second = 0
                         self.state = 5 - self.state
+                    if self.state == self.WORK_RUN:
+                        self.PrintText("Work", color=BicolorMatrix8x8.RED)
+                    elif self.state == self.REST_RUN:
+                        self.PrintText("Rest", color=BicolorMatrix8x8.GREEN)
+                    elif self.state == self.REST_PAUSE or self.state == self.WORK_PAUSE:
+                        self.PrintText("Pauz", color=BicolorMatrix8x8.YELLOW, delay=0.005)
                 self.button_consecutive = 0
         
         if (self.state == self.WORK_RUN or self.state == self.REST_RUN):
@@ -230,9 +240,11 @@ class Pomo:
                     if self.state == self.WORK_RUN:
                         self.state = self.REST_PAUSE
                         self.countdown_seconds = 5 * 60
+                        self.PrintText("Please take some rest!", color=BicolorMatrix8x8.GREEN)
                     else:
                         self.state = self.WORK_PAUSE
                         self.countdown_seconds = 25 * 60
+                        self.PrintText("Get ready to work!", color=BicolorMatrix8x8.RED)
     def GetPixel(self, x, y, num, sec):
         c = BicolorMatrix8x8.RED
         if (self.state >= 2):
@@ -276,7 +288,7 @@ class Pomo:
     def Button(self):
         return GPIO.input("P9_12")
     
-    def PrintText(self, str):
+    def PrintText(self, str, delay=0.02, color=BicolorMatrix8x8.RED):
         str = ' ' + str + ' '
         length = len(str) - 1
         for col_offset in range(length * 8):
@@ -295,15 +307,17 @@ class Pomo:
                     else:
                         row = table[ord(str[second_letter])][x]
                         c = (row >> (y - sl_start) ) & 1
+                    if c != 0:
+                        c = color
                     self.display.set_pixel(x, 7 - y, c)
             self.display.write_display()
-            time.sleep(0.05)
+            time.sleep(delay)
         
     def Message(self):
         if os.path.isfile(self.MSG_PATH):
             f = open(self.MSG_PATH, 'r')
             message = f.read();
-            self.PrintText(message)
+            self.PrintText(message, delay=0.05)
             os.remove(self.MSG_PATH)
     def Run(self):
         while True:
