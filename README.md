@@ -23,5 +23,6 @@ wget https://files.pythonhosted.org/packages/6f/6f/c26e40e5ffa9aa4601d9fa27a7238
 For other errors, try to see if below commands can fix them
 ```
 sudo apt-get install python-pip
+sudo pip install s3cmd
 sudo python -m pip install --upgrade pip setuptools wheel
 ```
