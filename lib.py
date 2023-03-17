@@ -168,7 +168,7 @@ table = [
     [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],   # U+007F
 ]
 
-class Pomo:
+class Pomo(object):
 
     # States
     WORK_PAUSE = 0
@@ -240,10 +240,12 @@ class Pomo:
                     if self.state == self.WORK_RUN:
                         self.state = self.REST_PAUSE
                         self.countdown_seconds = 5 * 60
+                        self.Alert()
                         self.PrintText("Please take some rest!", color=BicolorMatrix8x8.GREEN)
                     else:
                         self.state = self.WORK_PAUSE
                         self.countdown_seconds = 25 * 60
+                        self.Alert()
                         self.PrintText("Get ready to work!", color=BicolorMatrix8x8.RED)
     def GetPixel(self, x, y, num, sec):
         c = BicolorMatrix8x8.RED
@@ -315,10 +317,13 @@ class Pomo:
         
     def Message(self):
         if os.path.isfile(self.MSG_PATH):
+            self.Alert()
             f = open(self.MSG_PATH, 'r')
             message = f.read();
             self.PrintText(message, delay=0.05)
             os.remove(self.MSG_PATH)
+    def Alert(self):
+        pass
     def Run(self):
         while True:
             self.Message()
