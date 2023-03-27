@@ -14,7 +14,7 @@ e1 = Encoder(10, 9, valueChanged)
 try:
     while True:
         time.sleep(5)
-        print("Value is {}".format(e1.getValue()))
+        # print("Value is {}".format(e1.getValue()))
 except Exception:
     pass
 

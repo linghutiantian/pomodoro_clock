@@ -1,12 +1,8 @@
-from display import Display
-import os
-import button
-import time
+from display_cp import Display
 import threading
+import time
 from encoder import Encoder
 import RPi.GPIO as GPIO
-
-
 
 class NewClock:
     SLEEP_INTERVAL = 0.1
@@ -72,15 +68,16 @@ class Counter:
             self.count += 1
         else:
             self.count -= 1
-        print("* New value: {}, Direction: {}".format(self.count, direction))
-        self.display.ShowTime(minutes=self.count, seconds=0, point1_seconds=0)
-        self.buzz()
-        f = open(self.COUNT_PATH, 'w+')
-        f.write(str(self.count))
-        f.close()
+        # print("* New value: {}, Direction: {}".format(self.count, direction))
+        # self.display.ShowTime(minutes=self.count, seconds=0, point1_seconds=0)
+        # self.buzz()
+        # f = open(self.COUNT_PATH, 'w+')
+        # f.write(str(self.count))
+        # f.close()
 
 
     def buzz(self):
+        return
         GPIO.output(self.vib_pin, GPIO.HIGH)
         GPIO.output(self.buz_pin, GPIO.HIGH)
         time.sleep(0.008)
@@ -93,7 +90,8 @@ class Counter:
 
         try:
             while True:
-                time.sleep(10)
+                time.sleep(0.05)
+                self.display.ShowTime(minutes=self.count, seconds=0, point1_seconds=0)
         except KeyboardInterrupt:
             print('interrupted!')
             return
@@ -101,8 +99,8 @@ class Counter:
 
 
 def main():
-    clock = NewClock()
-    # clock = Counter()
+    # clock = NewClock()
+    clock = Counter()
     clock.run()
 
 
